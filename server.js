@@ -3,14 +3,14 @@ const app =express();
 const cors=require("cors")
 const mongodb=require("mongodb")
 const mongoClient= mongodb.MongoClient
-const URL="mongodb+srv://midhun_kumar:midhun_kumar@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
+const URL="mongodb+srv://midhun_kumar:midhun1@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
 const DB="mongo"
 
 //middleware
 app.use(express.json())
-app.use(cors({
-  origin:"http://localhost:3001"
-}))
+// app.use(cors({
+//   origin:"http://localhost:3001"
+// }))
 
 
 
@@ -24,18 +24,18 @@ app.post("/user",async function(req,res){
     const connection= await mongoClient.connect(URL)
 
     //step2:select the db
-    const db= connection.db (DB)
+    const db = connection.db(DB)
    
     //step3&4 :select the collection and do the operations
-    const resUser= await db.collection("users").insertOne(req.body);
+      await db.collection("users").insertOne(req.body);
 
     //step5 close the connection
       await connection.close()
      
        res.status(200).json({message:"data inserted"})
     }catch (error) {
-      console.log(error)
-      res.status(500).json({massage:"something went wrong"})
+      // console.log(error)
+      res.status(500).json({message:"something went wrong"})
       }
      
 
@@ -54,7 +54,7 @@ app.get("/users",async function(req,res){
 
      res.json(users)
   }catch(error){
-    console.log(error)
+    // console.log(error)
     res.status(500).json({message:"something went wrong"})
   }
     
@@ -81,7 +81,7 @@ app.get("/user/:id",async function(req,res){
 
     res.json(users)
   }catch(error){
-    console.log(error)
+    // console.log(error)
     res.status(500).json({message:"something went wrong"})
   }
     
@@ -111,12 +111,12 @@ app.put("/edit/:id",async function(req,res){
        //step2:
        const db=connection.db(DB);
        //step3&4:
-       const resUser=await db.collection("users").findOneAndUpdate({_id:mongodb.ObjectId(req.params.id)},{$set:req.body})
+      await db.collection("users").findOneAndUpdate({_id:mongodb.ObjectId(req.params.id)},{$set:req.body})
        //step5:
        await connection.close();
         res.status(200).json({message:"data edited"})
       } catch (error) {
-           console.log(error)
+          //  console.log(error)
            res.status(500).json({message:"something went wrong"})
       }
 
@@ -137,12 +137,12 @@ app.delete("/delete/:id",async function(req,res){
        //step2:
        const db=connection.db(DB);
        //step3&4:
-       const resUser=await db.collection("users").findOneAndDelete({_id:mongodb.ObjectId(req.params.id)})
+        await db.collection("users").findOneAndDelete({_id:mongodb.ObjectId(req.params.id)})
        //step5:
        connection.close();
        res.status(200).json({message:"data deleted"})
       } catch (error) {
-       console.log(error)
+      //  console.log(error)
        res.status(500).json({message:"something went wrong"})
     }
 
@@ -162,5 +162,5 @@ app.delete("/delete/:id",async function(req,res){
 
 // })
 
-app.listen(process.env.PORT||3000);
+app.listen(process.env.PORT||4000);
 // console.log(process)
