@@ -6,9 +6,6 @@ const mongoClient= mongodb.MongoClient
 const URL="mongodb+srv://midhun_kumar:midhun1@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
 const DB="mongo"
 
-
-
-
 //middleware
 app.use(express.json())
 app.use(cors({
