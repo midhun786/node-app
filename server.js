@@ -4,7 +4,7 @@ const cors=require("cors")
 const mongodb=require("mongodb")
 const mongoClient= mongodb.MongoClient
 const URL="mongodb+srv://midhun_kumar:admin123@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
-const DB="mongo_practice"
+const DB="b37-wd-tm"
 
 
 let users=[];
