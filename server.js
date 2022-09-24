@@ -3,7 +3,7 @@ const app =express();
 const cors=require("cors")
 const mongodb=require("mongodb")
 const mongoClient= mongodb.MongoClient
-const URL="mongodb+srv://midhun_kumar:admin123@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
+const URL="mongodb+srv://midhun_kumar:midhun1@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
 const DB="mongo"
 
 
