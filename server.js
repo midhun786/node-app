@@ -2,9 +2,12 @@ const express=require("express");
 const app =express();
 const cors=require("cors")
 const mongodb=require("mongodb")
+const dotenv=require("dotenv").config()
 const mongoClient= mongodb.MongoClient
-const URL="mongodb+srv://midhun_kumar:midhun1@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
+const URL=process.env.DB
 const DB="mongo"
+
+
 
 //middleware
 app.use(express.json())
@@ -163,5 +166,5 @@ app.delete("/delete/:id",async function(req,res){
 
 // })
 
-app.listen(process.env.PORT||4000);
+app.listen(process.env.PORT||3000);
 // console.log(process)
