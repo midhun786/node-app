@@ -3,11 +3,11 @@ const app =express();
 const cors=require("cors")
 const mongodb=require("mongodb")
 const mongoClient= mongodb.MongoClient
-const URL="mongodb+srv://midhun_kumar:admin123@cluster0.imkoaf8.mongodb.net/?retryWrites=true&w=majority"
-const DB="b37-wd-tm"
+const URL="mongodb+srv://midhun_kumar:admin123@cluster0.vdqbweb.mongodb.net/?retryWrites=true&w=majority"
+const DB="mongo"
 
 
-let users=[];
+
 
 //middleware
 app.use(express.json())
