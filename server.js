@@ -12,11 +12,13 @@ const DB="mongo"
 //middleware
 app.use(express.json())
 
+//For cors policy error package
 app.use(cors({
   origin:"http://localhost:3000"
 }))
 
 
+//----------------------------------- For users-------------------------------------------//
 
 app.post("/user",async function(req,res){
     // console.log(req.body)
@@ -165,6 +167,141 @@ app.delete("/delete/:id",async function(req,res){
 //     res.json(resUser)
 
 // })
+
+//-----------------------------for products----------------------------------//
+//  let products =[];
+app.post("/product",async function(req,res){
+ 
+  // console.log(req.body)
+  // products.push(req.body)
+  // req.body.id=products.length
+  // res.json({message:"products created"})
+ try {
+    //step1:connection between nodejs and mongo db
+  const connection= await mongoClient.connect(URL)
+
+  //step2:select the db
+  const db = connection.db(DB)
+ 
+  //step3&4 :select the collection and do the operations
+    await db.collection("products").insertOne(req.body);
+
+  //step5 close the connection
+    await connection.close()
+   
+     res.status(200).json({message:"data inserted"})
+  }catch (error) {
+    // console.log(error)
+    res.status(500).json({message:"something went wrong"})
+    }
+  })
+  
+  app.get("/products", async function(req,res){
+    // res.json(products)
+      try{
+    //step1:
+      const connection = await mongoClient.connect(URL)
+  //step2:
+    const db = connection.db(DB) 
+    //step3& 4
+    const users=await db.collection("products").find().toArray();
+    //step5:
+    await connection.close()
+
+     res.json(users)
+  }catch(error){
+    // console.log(error)
+    res.status(500).json({message:"something went wrong"})
+  }
+  })
+
+  app.get("/product/:id",async function(req,res){
+  //   console.log(req)
+  //   console.log(req.params.id)
+  //   let productId=req.params.id;
+
+  //   let proId= products.find((item)=>item.id==productId)
+  //  if(proId){
+  //     res.json(proId)
+  //   }else{
+  //     res.json({message:"user not found"})
+  //   }
+    try{
+    //step1:
+      const connection = await mongoClient.connect(URL)
+  //step2:
+    const db = connection.db(DB) 
+    //step3& 4
+    const users=await db.collection("products").findOne({_id:mongodb.ObjectId(req.params.id)});
+    //step5:
+    await connection.close()
+
+    res.json(users)
+  }catch(error){
+    // console.log(error)
+    res.status(500).json({message:"something went wrong"})
+  }
+   
+  })
+  
+app.put("/proedit/:id",async function(req,res){
+  //   console.log(req.params.id)
+
+  //   let editId=req.params.id
+  //   let userIndex=products.findIndex((item)=>item.id==editId)
+
+  //   Object.keys(req.body).forEach((item)=>{
+  //       products[userIndex][item]=req.body[item]
+  //  })
+  //  if(userIndex!=-1){
+  //     res.json({message:"done"})
+  //  }else{
+  //   res.json({message:"user not found"})
+  //  }
+  try {
+      //step1:
+       const connection=await mongoClient.connect(URL);
+       //step2:
+       const db=connection.db(DB);
+       //step3&4:
+      await db.collection("products").findOneAndUpdate({_id:mongodb.ObjectId(req.params.id)},{$set:req.body})
+       //step5:
+       await connection.close();
+        res.status(200).json({message:"data edited"})
+      } catch (error) {
+          //  console.log(error)
+           res.status(500).json({message:"something went wrong"})
+      }
+
+  })
+  app.delete("/prodelete/:id",async function(req,res){
+    // let delId=req.params.id
+    // let userIndex=users.findIndex((item)=>item.id==delId)
+    // if(userIndex!=-1){
+    // products.splice(userIndex,1)
+    // res.json({message:"user deleted"})
+    // }else{
+    //     res.json({message:"user not found"})
+    // }
+    try {
+       //step1:
+       const connection=await mongoClient.connect(URL)
+       //step2:
+       const db=connection.db(DB);
+       //step3&4:
+        await db.collection("products").findOneAndDelete({_id:mongodb.ObjectId(req.params.id)})
+       //step5:
+       connection.close();
+       res.status(200).json({message:"data deleted"})
+      } catch (error) {
+      //  console.log(error)
+       res.status(500).json({message:"something went wrong"})
+    }
+
+})
+
+
+
 
 app.listen(process.env.PORT||4000);
 // console.log(process)
