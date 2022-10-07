@@ -14,7 +14,7 @@ app.use(express.json())
 
 //For cors policy error package
 app.use(cors({
-  origin:"https://harmonious-sprite-2021eb.netlify.app/"
+  origin:"https://harmonious-sprite-2021eb.netlify.app"
 }))
 
 
