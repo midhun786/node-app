@@ -24,9 +24,9 @@ app.use(cors({
 let authenticate=(req,res,next)=>{
     //  console.log(req.headers)
     // res.status(401).json({message:"unauthorized"})
-    if(req.headers.authorization){
+    if(req.headers.authorisation){
       try {
-        let decode =jwt.verify(req.headers.authorization,"jfbaudsgfygsdfyi");
+        let decode =jwt.verify(req.headers.authorisation,"jfbaudsgfygsdfyi");
       if(decode){
        next();
       }} catch (error) {
