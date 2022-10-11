@@ -350,7 +350,7 @@ app.post("/login",async function(req,res){
     let Compare =await bcrypt.compare(req.body.password,user.password)
   if(Compare){
       
-      let token =jwt.sign({_id:user._id},"jfbaudsgfygsdfyi",{expiresIn:"5m"})
+      let token =jwt.sign({_id:user._id},"jfbaudsgfygsdfyi",{expiresIn:"60*60"})
       res.json({token})
       // res.json({message:"logged in successfully"});
     }else{
