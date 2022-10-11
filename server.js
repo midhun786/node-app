@@ -1,13 +1,13 @@
-const express=require("express");
-const app =express();
-const cors=require("cors")
-const mongodb=require("mongodb")
-const jwt= require("jsonwebtoken");
-const bcrypt=require("bcryptjs");
-const dotenv=require("dotenv").config()
-const mongoClient= mongodb.MongoClient
-const URL=process.env.DB
-const DB="mongo"
+const express = require("express");
+const app = express();
+const cors = require("cors")
+const mongodb = require("mongodb")
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+require("dotenv").config()
+const mongoClient = mongodb.MongoClient
+const URL = process.env.DB
+const DB = "mongo"
 
 
 
@@ -16,7 +16,7 @@ app.use(express.json())
 
 //For cors policy error package
 app.use(cors({
-  origin:"https://harmonious-sprite-2021eb.netlify.app/"
+  origin:"https://harmonious-sprite-2021eb.netlify.app"
 }))
 
 
