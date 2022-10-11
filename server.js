@@ -2,6 +2,8 @@ const express=require("express");
 const app =express();
 const cors=require("cors")
 const mongodb=require("mongodb")
+const jwt= require("jsonwebtoken");
+const bcrypt=require("bcryptjs");
 const dotenv=require("dotenv").config()
 const mongoClient= mongodb.MongoClient
 const URL=process.env.DB
@@ -19,8 +21,23 @@ app.use(cors({
 
 
 //----------------------------------- For users-------------------------------------------//
+let authenticate=(req,res,next)=>{
+    //  console.log(req.headers)
+    // res.status(401).json({message:"unauthorized"})
+    if(req.headers.authorization){
+      try {
+        let decode =jwt.verify(req.headers.authorization,"jfbaudsgfygsdfyi");
+      if(decode){
+       next();
+      }} catch (error) {
+        res.status(401).json({message:"unauthorized"})
+      }
+    }else{
+      res.status(401).json({message:"unauthorized"})
+    }
+}
 
-app.post("/user",async function(req,res){
+app.post("/user",authenticate,async function(req,res){
     // console.log(req.body)
     // users.push(req.body)
     // req.body.id=users.length
@@ -47,7 +64,7 @@ app.post("/user",async function(req,res){
 
 })
 
-app.get("/users",async function(req,res){
+app.get("/users",authenticate,async function(req,res){
   try{
     //step1:
       const connection = await mongoClient.connect(URL)
@@ -66,7 +83,7 @@ app.get("/users",async function(req,res){
     
 })
 
-app.get("/user/:id",async function(req,res){
+app.get("/user/:id",authenticate,async function(req,res){
   //  console.log(req.params.id)
   // let objId = req.params.id
   // let user=users.find((item)=> item.id==objId)
@@ -95,7 +112,7 @@ app.get("/user/:id",async function(req,res){
 
 
 
-app.put("/edit/:id",async function(req,res){
+app.put("/edit/:id",authenticate,async function(req,res){
     // console.log(req.params.id)
 
   //   let editId=req.params.id
@@ -128,7 +145,7 @@ app.put("/edit/:id",async function(req,res){
 
   })
 
-app.delete("/delete/:id",async function(req,res){
+app.delete("/delete/:id",authenticate,async function(req,res){
     // let delId=req.params.id
     // let userIndex=users.findIndex((item)=>item.id==delId)
     // if(userIndex!=-1){
@@ -300,6 +317,50 @@ app.put("/proedit/:id",async function(req,res){
 
 })
 
+
+app.post("/register",async function(req,res){
+    try{
+      let connection= await mongoClient.connect(URL);
+      let db= connection.db(DB);
+
+      let salt= await bcrypt.genSalt(10);
+      // console.log(salt)
+      let Hash= await bcrypt.hash(req.body.password, salt)
+      console.log(Hash)
+      req.body.password=Hash                          
+
+      let register= await db.collection("userlogin").insertOne(req.body)
+      // console.log(req.body)
+  
+      await connection.close()
+      res.json({message:"user registered successfully"})
+    }catch(error){
+      console.log(error)
+      res.json(error)
+    }
+})
+
+app.post("/login",async function(req,res){
+  
+  let connection= await mongoClient.connect(URL);
+  let db = connection.db(DB);
+
+  let user = await db.collection("userlogin").findOne({email:req.body.email})
+  if(user){
+    let Compare =await bcrypt.compare(req.body.password,user.password)
+  if(Compare){
+      
+      let token =jwt.sign({_id:user._id},"jfbaudsgfygsdfyi",{expiresIn:"5m"})
+      res.json({token})
+      // res.json({message:"logged in successfully"});
+    }else{
+      res.json({message:"password is wrong"})
+    }
+  }else{
+    res.status(401).json({message:"user email not found"})
+  }
+
+})
 
 
 
