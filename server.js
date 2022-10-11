@@ -1,13 +1,13 @@
-const express = require("express");
-const app = express();
-const cors = require("cors")
-const mongodb = require("mongodb")
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-require("dotenv").config()
-const mongoClient = mongodb.MongoClient
-const URL = process.env.DB
-const DB = "mongo"
+const express=require("express");
+const app =express();
+const cors=require("cors")
+const mongodb=require("mongodb")
+const jwt= require("jsonwebtoken");
+const bcrypt=require("bcryptjs");
+const dotenv=require("dotenv").config()
+const mongoClient= mongodb.MongoClient
+const URL=process.env.DB
+const DB="mongo"
 
 
 
@@ -16,7 +16,7 @@ app.use(express.json())
 
 //For cors policy error package
 app.use(cors({
-  origin:"https://harmonious-sprite-2021eb.netlify.app"
+  origin:"http://localhost:3000"
 }))
 
 
@@ -350,7 +350,7 @@ app.post("/login",async function(req,res){
     let Compare =await bcrypt.compare(req.body.password,user.password)
   if(Compare){
       
-      let token =jwt.sign({_id:user._id},"jfbaudsgfygsdfyi",{expiresIn:"1h"})
+      let token =jwt.sign({_id:user._id},"jfbaudsgfygsdfyi",{expiresIn:""})
       res.json({token})
       // res.json({message:"logged in successfully"});
     }else{
@@ -364,5 +364,5 @@ app.post("/login",async function(req,res){
 
 
 
-app.listen(process.env.PORT||5000);
+app.listen(process.env.PORT||4000);
 // console.log(process)
