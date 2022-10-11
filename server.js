@@ -16,7 +16,7 @@ app.use(express.json())
 
 //For cors policy error package
 app.use(cors({
-  origin:"https://harmonious-sprite-2021eb.netlify.app"
+  origin:"http://localhost:3000"
 }))
 
 
@@ -350,7 +350,7 @@ app.post("/login",async function(req,res){
     let Compare =await bcrypt.compare(req.body.password,user.password)
   if(Compare){
       
-      let token =jwt.sign({_id:user._id},"jfbaudsgfygsdfyi",{expiresIn:"60*60"})
+      let token =jwt.sign({_id:user._id},"jfbaudsgfygsdfyi",{expiresIn:"1h"})
       res.json({token})
       // res.json({message:"logged in successfully"});
     }else{
